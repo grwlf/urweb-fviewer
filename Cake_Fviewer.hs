@@ -6,6 +6,7 @@ import qualified Cake_Bootstrap as Bootstrap hiding(main)
 import qualified Cake_Prelude as Prelude hiding(main)
 import qualified Cake_MonadPack as MonadPack hiding(main)
 import qualified Cake_Soup as Soup hiding(main)
+import qualified Cake_XMLW as XMLW hiding(main)
 import Cake_Fviewer_P
 
 (app,db) = uwapp_postgres (file "Fviewer.urp") $ do
@@ -15,10 +16,12 @@ import Cake_Fviewer_P
   allow mime "image/png";
   allow mime "image/gif";
   allow mime "application/octet-stream";
+  allow url "https://github.com/grwlf/urweb-fviewer*"
   library MonadPack.lib
   library Prelude.lib
   library Bootstrap.lib
   library Soup.lib
+  library XMLW.lib
   ur (sys "list")
   ur (sys "option")
   ur (sys "string")
