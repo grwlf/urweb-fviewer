@@ -143,6 +143,11 @@ and main {} : transaction page =
 
   xrow (
   xcol1 (
+    xp (
+    pb <xml>
+    <audio src={Vrungel_mp3.geturl} controls/>
+    </xml>
+    );
 
     xp (
     pb <xml><div style="text-align:left; margin-bottom:50px"><form>

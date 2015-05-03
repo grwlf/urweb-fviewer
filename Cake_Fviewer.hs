@@ -22,6 +22,7 @@ import Cake_Fviewer_P
   library Bootstrap.lib
   library Soup.lib
   library XMLW.lib
+  embed (file "vrungel.mp3")
   ur (sys "list")
   ur (sys "option")
   ur (sys "string")
