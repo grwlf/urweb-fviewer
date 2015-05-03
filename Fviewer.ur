@@ -81,7 +81,7 @@ fun with_auth_cookie [x:::Type] (f : string -> transaction x) : transaction x =
   f u
 
 sequence files_seq
-table files : {Id:int, User: string, File:blob, Size:int, Nam:string}
+table files : {Id:int, User: string, File:blob, Size:int, Nam:string, MimeType:string}
   PRIMARY KEY Id
 
 val user_size_limit = 10 * 1024 * 1024
@@ -90,6 +90,7 @@ val global_size_limit = 100 * 1024 * 1024
 fun insert_ (u:string) (f:file) : transaction (option int) =
   let
     val fsz = blobSize (fileData f)
+    val mt = fileMimeType f
   in
   sz <- ((Option.get 0) `Prelude.ap` oneRowE1(SELECT SUM(F.Size) FROM files AS F WHERE F.User = {[u]}));
   if (sz + fsz) > user_size_limit then
@@ -101,8 +102,8 @@ fun insert_ (u:string) (f:file) : transaction (option int) =
     else (
       i <- nextval files_seq;
       fnm <- return (case fileName f of |Some n => n | None => "file_"^(show i));
-      dml(INSERT INTO files(Id,User,File,Size,Nam)
-          VALUES  ({[i]}, {[u]}, {[fileData f]}, {[fsz]}, {[fnm]}));
+      dml(INSERT INTO files(Id,User,File,Size,Nam,MimeType)
+          VALUES  ({[i]}, {[u]}, {[fileData f]}, {[fsz]}, {[fnm]}, {[mt]}));
       return (Some i)
     )
   )
@@ -158,16 +159,17 @@ and main {} : transaction page =
     xtabl (
       pb
       <xml>
-        <tr> <th>Id</th> <th>Cookie</th> <th>Name</th> <th>Size, Mb</th> <th/> </tr>
+        <tr> <th>Id</th> <th>Cookie</th> <th>Name</th> <th>Type</th> <th>Size, Mb</th> <th/> </tr>
       </xml>;
 
-      XMLW.query_ (SELECT F.Id, F.User, F.Nam, F.Size FROM files AS F ORDER BY F.Id,F.User,F.Nam)
+      XMLW.query_ (SELECT F.Id, F.User, F.Nam, F.MimeType, F.Size FROM files AS F ORDER BY F.Id,F.User,F.Nam)
       (fn r =>
         pb
         <xml><tr>
           <td>{[r.F.Id]}</td>
           <td>{[r.F.User]}</td>
           <td>{[r.F.Nam]}</td>
+          <td>{[r.F.MimeType]}</td>
           <td>{[
            Soup.fmtfloat 2 ((float r.F.Size) / (1024.0 * 1024.0) )
           ]}</td>
