@@ -45,6 +45,7 @@ UWVER = $(shell $(URWEB) -version)
 	echo ffi\ \.\/autogen\/vrungel\_mp3\_c  ;\
 	echo include\ \.\/autogen\/vrungel\_mp3\_c\.h  ;\
 	echo link\ \.\/autogen\/vrungel\_mp3\_c\.o  ;\
+	echo ffi\ \.\/Audio  ;\
 	) > ./.cake3/tmp___Fviewer_in_1
 ./.cake3/tmp___lib_urweb_xmlw_lib_in_2: ./Makefile.dev ./lib/urweb-monad-pack/lib.urp ./lib/urweb-xmlw/XMLW.ur
 	( \

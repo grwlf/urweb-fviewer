@@ -23,6 +23,7 @@ import Cake_Fviewer_P
   library Soup.lib
   library XMLW.lib
   embed (file "vrungel.mp3")
+  ffi (file "Audio.urs")
   ur (sys "list")
   ur (sys "option")
   ur (sys "string")
