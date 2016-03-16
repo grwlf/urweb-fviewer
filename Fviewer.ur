@@ -88,7 +88,7 @@ val user_size_limit = 10 * 1024 * 1024
 val global_size_limit = 100 * 1024 * 1024
 
 fun insert_ (u:string) (f:file) : transaction (option int) =
-  let 
+  let
     val fsz = blobSize (fileData f)
     val mt = fileMimeType f
   in
@@ -137,7 +137,7 @@ fun receive (f:{File:file}) : transaction page =
     pb <xml><p><a link={main {}}>Back</a></p></xml>
   ))
 
-and main {} : transaction page = 
+and main {} : transaction page =
   template (
   pb <xml><h1>Uploader test</h1></xml>;
 
