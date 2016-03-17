@@ -12,7 +12,8 @@ URWEB = urweb
 UWCC = $(shell $(shell $(URWEB) -print-ccompiler) -print-prog-name=gcc)
 UWCPP = $(shell $(shell $(URWEB) -print-ccompiler) -print-prog-name=g++)
 UWFLAGS = 
-UWINCLUDE = -I$(shell $(URWEB) -print-cinclude)
+UWINCLUDE = $(shell $(URWEB) -print-cinclude)
+UWINCLUDEDIR = $(shell $(URWEB) -print-cinclude)/..
 UWVER = $(shell $(URWEB) -version)
 .PHONY: ./all
 ./all: ./Fviewer.exe ./Fviewer.sql ./Makefile.dev
@@ -28,8 +29,8 @@ UWVER = $(shell $(URWEB) -version)
 	) > ./.cake3/tmp___Fviewer_in_2
 ./.cake3/tmp___Fviewer_in_1: ./Fviewer.ur ./Makefile.dev ./autogen/vrungel_mp3.ur ./autogen/vrungel_mp3.urp.in ./autogen/vrungel_mp3_c.c ./autogen/vrungel_mp3_c.h ./autogen/vrungel_mp3_c.o ./autogen/vrungel_mp3_c.urs ./lib/uru3/Bootstrap/lib.urp ./lib/urweb-monad-pack/lib.urp ./lib/urweb-prelude/lib.urp ./lib/urweb-soup/lib.urp ./lib/urweb-xmlw/lib.urp
 	( \
-	echo sql\ \.\/Fviewer\.sql  ;\
 	echo database\ dbname\=Fviewer  ;\
+	echo sql\ \.\/Fviewer\.sql  ;\
 	echo allow\ mime\ text\/javascript  ;\
 	echo allow\ mime\ text\/css  ;\
 	echo allow\ mime\ image\/jpeg  ;\
@@ -83,10 +84,10 @@ UWVER = $(shell $(URWEB) -version)
 	echo ffi\ \.\/autogen\/Soup\_css\_c  ;\
 	echo include\ \.\/autogen\/Soup\_css\_c\.h  ;\
 	echo link\ \.\/autogen\/Soup\_css\_c\.o  ;\
-	echo ffi\ \.\/Analytics  ;\
-	echo include\ \.\/Analytics\.h  ;\
 	echo link\ \.\/Analytics\.o  ;\
 	echo link\ \-lstdc\+\+  ;\
+	echo ffi\ \.\/Analytics  ;\
+	echo include\ \.\/Analytics\.h  ;\
 	) > ./.cake3/tmp___lib_urweb_soup_lib_in_1
 ./.cake3/tmp___lib_urweb_prelude_lib_in_2: ./Makefile.dev ./lib/urweb-prelude/src/Prelude.ur
 	( \
@@ -182,8 +183,8 @@ UWVER = $(shell $(URWEB) -version)
 	psql -f ./Fviewer.sql Fviewer
 	touch ./Fviewer.db
 .INTERMEDIATE: ./.fix-multy1
-./.fix-multy1: ./Fviewer.urp ./Makefile.dev $(call GUARD,URWEB) $(call GUARD,UWFLAGS) $(call GUARD,UWVER)
-	$(URWEB) -dbms postgres $(UWFLAGS) ./Fviewer
+./.fix-multy1: ./Fviewer.urp ./Makefile.dev $(call GUARD,URWEB) $(call GUARD,UWFLAGS) $(call GUARD,UWINCLUDEDIR) $(call GUARD,UWVER)
+	C_INCLUDE_PATH=$(UWINCLUDEDIR) $(URWEB) -dbms postgres $(UWFLAGS) ./Fviewer
 .INTERMEDIATE: ./.fix-multy10
 ./.fix-multy10: ./Makefile.dev ./lib/uru3/Bootstrap/dist/fonts/glyphicons-halflings-regular.ttf
 	mkdir -p ./lib/uru3/Bootstrap/autogen 2>/dev/null
@@ -247,21 +248,21 @@ UWVER = $(shell $(URWEB) -version)
 ./autogen/vrungel_mp3_c.c: ./.fix-multy2
 ./autogen/vrungel_mp3_c.h: ./.fix-multy2
 ./autogen/vrungel_mp3_c.o: ./Makefile.dev ./autogen/vrungel_mp3.ur ./autogen/vrungel_mp3.urp.in ./autogen/vrungel_mp3_c.c ./autogen/vrungel_mp3_c.h ./autogen/vrungel_mp3_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./autogen/vrungel_mp3_c.o ./autogen/vrungel_mp3_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./autogen/vrungel_mp3_c.o ./autogen/vrungel_mp3_c.c
 ./autogen/vrungel_mp3_c.urs: ./.fix-multy2
 ./lib/uru3/Bootstrap/autogen/FormSignin_css.ur: ./.fix-multy3
 ./lib/uru3/Bootstrap/autogen/FormSignin_css.urp.in: ./.fix-multy3
 ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.c: ./.fix-multy3
 ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.h: ./.fix-multy3
 ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/FormSignin_css.ur ./lib/uru3/Bootstrap/autogen/FormSignin_css.urp.in ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.c ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.h ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.o ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.o ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.c
 ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.urs: ./.fix-multy3
 ./lib/uru3/Bootstrap/autogen/Tooltip_js.ur: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/Tooltip_js.urp.in: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.c: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.h: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/Tooltip_js.ur ./lib/uru3/Bootstrap/autogen/Tooltip_js.urp.in ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.c ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.h ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.urs ./lib/uru3/Bootstrap/autogen/Tooltip_js_js.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.o ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.o ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.c
 ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.urs: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/Tooltip_js_js.urs: ./.fix-multy4
 ./lib/uru3/Bootstrap/autogen/bootstrap_css.ur: ./.fix-multy5
@@ -269,49 +270,49 @@ UWVER = $(shell $(URWEB) -version)
 ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.c: ./.fix-multy5
 ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.h: ./.fix-multy5
 ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/bootstrap_css.ur ./lib/uru3/Bootstrap/autogen/bootstrap_css.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.c
 ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.urs: ./.fix-multy5
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.ur: ./.fix-multy6
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.urp.in: ./.fix-multy6
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.c: ./.fix-multy6
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.h: ./.fix-multy6
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.ur ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.c
 ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.urs: ./.fix-multy6
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.ur: ./.fix-multy7
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.urp.in: ./.fix-multy7
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.c: ./.fix-multy7
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.h: ./.fix-multy7
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.ur ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.o ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.c
 ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.urs: ./.fix-multy7
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.ur: ./.fix-multy8
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.urp.in: ./.fix-multy8
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.c: ./.fix-multy8
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.h: ./.fix-multy8
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.c
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.urs: ./.fix-multy8
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.ur: ./.fix-multy9
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.urp.in: ./.fix-multy9
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.c: ./.fix-multy9
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.h: ./.fix-multy9
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.c
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.urs: ./.fix-multy9
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.ur: ./.fix-multy10
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.urp.in: ./.fix-multy10
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.c: ./.fix-multy10
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.h: ./.fix-multy10
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.c
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.urs: ./.fix-multy10
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.ur: ./.fix-multy11
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.urp.in: ./.fix-multy11
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.c: ./.fix-multy11
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.h: ./.fix-multy11
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.o: ./Makefile.dev ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.o ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.c
 ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.urs: ./.fix-multy11
 ./lib/uru3/Bootstrap/lib.urp: ./.cake3/tmp___lib_uru3_Bootstrap_lib_in_1 ./.cake3/tmp___lib_uru3_Bootstrap_lib_in_2 ./Makefile.dev ./lib/uru3/Bootstrap/autogen/FormSignin_css.ur ./lib/uru3/Bootstrap/autogen/FormSignin_css.urp.in ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.c ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.h ./lib/uru3/Bootstrap/autogen/FormSignin_css_c.urs ./lib/uru3/Bootstrap/autogen/Tooltip_js.ur ./lib/uru3/Bootstrap/autogen/Tooltip_js.urp.in ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.c ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.h ./lib/uru3/Bootstrap/autogen/Tooltip_js_c.urs ./lib/uru3/Bootstrap/autogen/Tooltip_js_js.urs ./lib/uru3/Bootstrap/autogen/bootstrap_css.ur ./lib/uru3/Bootstrap/autogen/bootstrap_css.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_css_c.urs ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.ur ./lib/uru3/Bootstrap/autogen/bootstrap_min_js.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_min_js_c.urs ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.ur ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css.urp.in ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.c ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.h ./lib/uru3/Bootstrap/autogen/bootstrap_theme_css_c.urs ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_eot_c.urs ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_svg_c.urs ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_ttf_c.urs ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.ur ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff.urp.in ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.c ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.h ./lib/uru3/Bootstrap/autogen/glyphicons_halflings_regular_woff_c.urs
 	cat ./.cake3/tmp___lib_uru3_Bootstrap_lib_in_1 > ./lib/uru3/Bootstrap/lib.urp
@@ -322,14 +323,14 @@ UWVER = $(shell $(URWEB) -version)
 ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.c: ./.fix-multy12
 ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.h: ./.fix-multy12
 ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.o: ./Makefile.dev ./lib/uru3/JQuery/autogen/jquery_1_9_1_js.ur ./lib/uru3/JQuery/autogen/jquery_1_9_1_js.urp.in ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.c ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.h ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.o ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.o ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.c
 ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.urs: ./.fix-multy12
 ./lib/uru3/JQuery/lib.urp: ./.cake3/tmp___lib_uru3_JQuery_lib_in_1 ./.cake3/tmp___lib_uru3_JQuery_lib_in_2 ./Makefile.dev ./lib/uru3/JQuery/autogen/jquery_1_9_1_js.ur ./lib/uru3/JQuery/autogen/jquery_1_9_1_js.urp.in ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.c ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.h ./lib/uru3/JQuery/autogen/jquery_1_9_1_js_c.urs
 	cat ./.cake3/tmp___lib_uru3_JQuery_lib_in_1 > ./lib/uru3/JQuery/lib.urp
 	cat ./lib/uru3/JQuery/autogen/jquery_1_9_1_js.urp.in >> ./lib/uru3/JQuery/lib.urp
 	cat ./.cake3/tmp___lib_uru3_JQuery_lib_in_2 >> ./lib/uru3/JQuery/lib.urp
-./lib/uru3/Uru/Script.o: ./Makefile.dev ./lib/uru3/Uru/Script.c $(call GUARD,UWCC) $(call GUARD,UWCFLAGS) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) $(UWCFLAGS)  -o ./lib/uru3/Uru/Script.o ./lib/uru3/Uru/Script.c
+./lib/uru3/Uru/Script.o: ./Makefile.dev ./lib/uru3/Uru/Script.c $(call GUARD,UWCC) $(call GUARD,UWCFLAGS) $(call GUARD,UWINCLUDE) $(call GUARD,UWINCLUDEDIR)
+	$(UWCC) -c -I$(UWINCLUDEDIR) -I$(UWINCLUDE) $(UWCFLAGS)  -o ./lib/uru3/Uru/Script.o ./lib/uru3/Uru/Script.c
 ./lib/uru3/Uru/lib.urp: ./.cake3/tmp___lib_uru3_Uru_lib_in_1 ./.cake3/tmp___lib_uru3_Uru_lib_in_2 ./Makefile.dev
 	cat ./.cake3/tmp___lib_uru3_Uru_lib_in_1 > ./lib/uru3/Uru/lib.urp
 	cat ./.cake3/tmp___lib_uru3_Uru_lib_in_2 >> ./lib/uru3/Uru/lib.urp
@@ -339,14 +340,14 @@ UWVER = $(shell $(URWEB) -version)
 ./lib/urweb-prelude/lib.urp: ./.cake3/tmp___lib_urweb_prelude_lib_in_1 ./.cake3/tmp___lib_urweb_prelude_lib_in_2 ./Makefile.dev
 	cat ./.cake3/tmp___lib_urweb_prelude_lib_in_1 > ./lib/urweb-prelude/lib.urp
 	cat ./.cake3/tmp___lib_urweb_prelude_lib_in_2 >> ./lib/urweb-prelude/lib.urp
-./lib/urweb-soup/Analytics.o: ./Makefile.dev ./lib/urweb-soup/Analytics.cpp $(call GUARD,UWCFLAGS) $(call GUARD,UWCPP) $(call GUARD,UWINCLUDE)
-	$(UWCPP) -c $(UWCFLAGS) $(UWINCLUDE) -std=c++11 -o ./lib/urweb-soup/Analytics.o ./lib/urweb-soup/Analytics.cpp
+./lib/urweb-soup/Analytics.o: ./Makefile.dev ./lib/urweb-soup/Analytics.cpp $(call GUARD,UWCFLAGS) $(call GUARD,UWCPP) $(call GUARD,UWINCLUDE) $(call GUARD,UWINCLUDEDIR)
+	$(UWCPP) -c $(UWCFLAGS) -I$(UWINCLUDEDIR) -I$(UWINCLUDE) -std=c++11 -o ./lib/urweb-soup/Analytics.o ./lib/urweb-soup/Analytics.cpp
 ./lib/urweb-soup/autogen/Soup_css.ur: ./.fix-multy13
 ./lib/urweb-soup/autogen/Soup_css.urp.in: ./.fix-multy13
 ./lib/urweb-soup/autogen/Soup_css_c.c: ./.fix-multy13
 ./lib/urweb-soup/autogen/Soup_css_c.h: ./.fix-multy13
 ./lib/urweb-soup/autogen/Soup_css_c.o: ./Makefile.dev ./lib/urweb-soup/autogen/Soup_css.ur ./lib/urweb-soup/autogen/Soup_css.urp.in ./lib/urweb-soup/autogen/Soup_css_c.c ./lib/urweb-soup/autogen/Soup_css_c.h ./lib/urweb-soup/autogen/Soup_css_c.urs $(call GUARD,UWCC) $(call GUARD,UWINCLUDE)
-	$(UWCC) -c $(UWINCLUDE) -o ./lib/urweb-soup/autogen/Soup_css_c.o ./lib/urweb-soup/autogen/Soup_css_c.c
+	$(UWCC) -c -I$(UWINCLUDE) -o ./lib/urweb-soup/autogen/Soup_css_c.o ./lib/urweb-soup/autogen/Soup_css_c.c
 ./lib/urweb-soup/autogen/Soup_css_c.urs: ./.fix-multy13
 ./lib/urweb-soup/lib.urp: ./.cake3/tmp___lib_urweb_soup_lib_in_1 ./.cake3/tmp___lib_urweb_soup_lib_in_2 ./Makefile.dev ./lib/urweb-soup/autogen/Soup_css.ur ./lib/urweb-soup/autogen/Soup_css.urp.in ./lib/urweb-soup/autogen/Soup_css_c.c ./lib/urweb-soup/autogen/Soup_css_c.h ./lib/urweb-soup/autogen/Soup_css_c.urs
 	cat ./.cake3/tmp___lib_urweb_soup_lib_in_1 > ./lib/urweb-soup/lib.urp
@@ -372,6 +373,9 @@ $(call GUARD,UWFLAGS):
 	touch $@
 $(call GUARD,UWINCLUDE):
 	rm -f .cake3/GUARD_UWINCLUDE_*
+	touch $@
+$(call GUARD,UWINCLUDEDIR):
+	rm -f .cake3/GUARD_UWINCLUDEDIR_*
 	touch $@
 $(call GUARD,UWVER):
 	rm -f .cake3/GUARD_UWVER_*
