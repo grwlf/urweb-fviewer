@@ -17,5 +17,13 @@ Install
 1. Clone [urweb-build](https://github.com/grwlf/urweb-build) base expression,
    setup the NIX\_PATH environment variable
 2. Clone the Fviewer repository with submodules
-3. Run `nix-build build.nix`
+3. Run `nix-build build.nix`. Symlink named `result` will be created.
+
+Run
+---
+
+1. Run `./result/mkdb.sh` script to create the initial database in current
+   directory
+2. Run `./result/Fviewer.exe` to run the application
+3. Open browser and visit local server running the application http://127.0.0.1:8080/Fviewer/main
 
