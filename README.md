@@ -6,8 +6,8 @@ complex Ur/Web application development:
 
 * Ur/Web compiler [Ur/Web](http://impredicative.com/ur/)
 * Git submodules containing Ur/Web libraries including uru3, xmlw and others.
-* File `build.nix` containing build rules to be evaluated with
-  [urweb-build](https://github.com/grwlf/urweb-build) base expression and
+* File `default.nix` containing build rules to be evaluated together with
+  [urweb-build](https://github.com/grwlf/urweb-build) base expression by the
   [nix-build](http://nixos.org/nix/) interpreter
 
 Install
